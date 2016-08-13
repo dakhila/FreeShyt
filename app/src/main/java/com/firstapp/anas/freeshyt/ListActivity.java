@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 public class ListActivity extends AppCompatActivity {
 
 
-    public MediaPlayer comfortable;
+    public MediaPlayer company;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,8 +19,8 @@ public class ListActivity extends AppCompatActivity {
         transaction.add(R.id.container, new ItemListFragment())
                 .commit();
 
-        comfortable = MediaPlayer.create(this, R.raw.comfortable);
-        comfortable.start();
+        company = MediaPlayer.create(this, R.raw.company);
+        company.start();
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 

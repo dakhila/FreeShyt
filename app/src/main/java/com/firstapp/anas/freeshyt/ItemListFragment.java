@@ -16,7 +16,6 @@ import java.util.List;
 
 public class ItemListFragment extends Fragment {
 
-
     private ArrayAdapter<String> mItemListAdapter;
 
     public ItemListFragment() {
