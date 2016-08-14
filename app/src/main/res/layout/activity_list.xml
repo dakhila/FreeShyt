@@ -15,14 +15,45 @@
         android:textSize="20dp"
         android:textStyle="bold"/>
 
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
     <EditText
+        android:id="@+id/text_search"
         android:layout_margin="5dp"
         android:hint="Search Location"
-        android:id="@+id/editTextSearch"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_width="340dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
 
+     <ImageButton
+         android:id="@+id/search_icon"
+         android:layout_width="wrap_content"
+         android:layout_height="match_parent"
+         android:src="@drawable/searchbutton"
+         android:background="@android:color/transparent"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentRight="true"
+         android:layout_alignParentEnd="true" />
 
+    </LinearLayout>
+
+    <!--<EditText android:imeOptions="actionSearch"-->
+        <!--android:inputType="text"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"/>-->
+
+    <!--<searchable xmlns:android="http://schemas.android.com/apk/res/android"-->
+                <!--android:label="My Search"-->
+                <!--android:hint="Search Location"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="50dp"-->
+                <!--android:voiceSearchMode="showVoiceSearchButton|launchRecognizer">-->
+    <!--</searchable>-->
 
     <FrameLayout
         android:id="@+id/container"

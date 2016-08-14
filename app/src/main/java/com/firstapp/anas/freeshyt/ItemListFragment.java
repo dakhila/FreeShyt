@@ -36,12 +36,13 @@ public class ItemListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         //temp data for display
         String[] someData = {
                 "             Lamborghini                               2 miles",
                 "             Yeezy 3                                   1.3 miles",
                 "             Air Jordan III OG                         1.2 miles",
-                "             Tacos                                     .6 miles",
+                "             X-Box One                                 .6 miles",
                 "             Rollex                                    .1 miles",
                 "             Ipod                                       6 miles",
                 "             LG T.V.                                    4 miles",
@@ -54,6 +55,9 @@ public class ItemListFragment extends Fragment {
         };
         List<String> freeStuff =
                 new ArrayList<String>(Arrays.asList(someData));
+
+
+
 
         mItemListAdapter =
                 new ArrayAdapter<String>(
