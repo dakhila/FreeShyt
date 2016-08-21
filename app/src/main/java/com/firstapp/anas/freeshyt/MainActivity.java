@@ -2,14 +2,13 @@ package com.firstapp.anas.freeshyt;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +26,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+
+
+    private int dumbChange;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
