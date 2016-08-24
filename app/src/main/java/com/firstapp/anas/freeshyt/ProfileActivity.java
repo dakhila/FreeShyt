@@ -25,6 +25,8 @@ public class ProfileActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        // for camera
+
         iv = (ImageView)findViewById(R.id.imageView);
 
         Button buttonphoto = (Button) findViewById(R.id.buttonPhoto);
