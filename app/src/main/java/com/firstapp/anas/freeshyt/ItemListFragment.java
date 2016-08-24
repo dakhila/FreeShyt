@@ -56,9 +56,6 @@ public class ItemListFragment extends Fragment {
         List<String> freeStuff =
                 new ArrayList<String>(Arrays.asList(someData));
 
-
-
-
         mItemListAdapter =
                 new ArrayAdapter<String>(
                         getActivity(),

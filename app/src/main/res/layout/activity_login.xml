@@ -15,7 +15,7 @@
         android:layout_height="100dp"
         android:scaleType="centerInside"
         android:background="@android:color/transparent"
-        android:src="@drawable/bindle"
+        android:src="@drawable/bindleeee"
         android:layout_marginLeft="350px"
         android:layout_centerHorizontal="true"
         android:id="@+id/imageView" />
