@@ -27,9 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
 
-
     private int dumbChange;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
