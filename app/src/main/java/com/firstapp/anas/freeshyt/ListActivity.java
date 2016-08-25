@@ -9,7 +9,6 @@ import android.widget.ImageButton;
 
 public class ListActivity extends AppCompatActivity {
 
-
     public MediaPlayer company;
     private ImageButton searchBtn;
 
