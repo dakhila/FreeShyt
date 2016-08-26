@@ -1,15 +1,21 @@
 package com.firstapp.anas.freeshyt;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -22,10 +28,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.io.File;
 
-
-
-
-
 public class ProfileActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
@@ -36,13 +38,14 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int SELECTED_PICTURE = 2;
     private static final int REQUEST_EXTERNAL_STORAGE = 50;
     Uri imageUri;
+    Bitmap bitmapImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         // for camera
         iv = (ImageView) findViewById(R.id.imageView);
-        Button choosephoto = (Button) findViewById(R.id.button_gallery);
+        Button uploadphoto = (Button) findViewById(R.id.button_upload);
         Button takePhoto = (Button) findViewById(R.id.buttonPhoto);
         //buttonphoto.setOnClickListener(this);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -51,15 +54,11 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(new Intent(this, LoginActivity.class));
         }
         FirebaseUser user = firebaseAuth.getCurrentUser();
-
         //textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
-
         //textViewUserEmail.setText("Welcome " + user.getEmail());
-        buttonLogout = (Button) findViewById(R.id.buttonLogout);
-
+        //buttonLogout = (Button) findViewById(R.id.buttonLogout);
         //buttonLogout.setOnClickListener(this);
-
-        choosephoto.setOnClickListener(new View.OnClickListener() {
+        uploadphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -75,31 +74,31 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 else{
                     //permission has already been granted in the past. bring up photos to choose from.
-                    dispatchUploadFromGallery();
+                    chooseUploadMethod();
                 }
             }
         });
 
-        takePhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(intent, CAM_REQUEST);
-                //selectImage();
-                if (ContextCompat.checkSelfPermission(ProfileActivity.this,
-                        android.Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    //permission has  not been granted, bring up dialog
-                    ActivityCompat.requestPermissions(ProfileActivity.this,
-                            new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
-                            CAM_REQUEST);
-                }
-                else{
-                    //permission has already been granted in the past. bring up photos to choose from.
-                    dispatchTakePictureIntent();
-                }
-            }
-        });
+//        takePhoto.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+////                startActivityForResult(intent, CAM_REQUEST);
+//                //selectImage();
+//                if (ContextCompat.checkSelfPermission(ProfileActivity.this,
+//                        android.Manifest.permission.READ_EXTERNAL_STORAGE)
+//                        != PackageManager.PERMISSION_GRANTED) {
+//                    //permission has  not been granted, bring up dialog
+//                    ActivityCompat.requestPermissions(ProfileActivity.this,
+//                            new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
+//                            CAM_REQUEST);
+//                }
+//                else{
+//                    //permission has already been granted in the past. bring up photos to choose from.
+//                    dispatchTakePictureIntent();
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -112,7 +111,6 @@ public class ProfileActivity extends AppCompatActivity {
                 // decodeUri(data.getData());
                 uploadImage(imageUri);
             }
-
     }
 
     @Override
@@ -125,7 +123,7 @@ public class ProfileActivity extends AppCompatActivity {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // permission was granted,
-                    dispatchUploadFromGallery();
+                    chooseUploadMethod();
 
                 } else {
                     //user denied permissions, show toast?
@@ -133,33 +131,77 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 return;
             }
-            //if called permissions by pressing camera btn
-            case CAM_REQUEST:{
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted,
-                    dispatchTakePictureIntent();
 
-                } else {
-                    //user denied permissions, show toast?
-                    Toast.makeText(this, "User has denied permissions", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
         }
+    }
+
+    public void chooseUploadMethod(){
+        final CharSequence[] items = { "Take Photo", "Choose from Library",
+                "Cancel" };
+        AlertDialog.Builder builder = new AlertDialog.Builder(ProfileActivity.this);
+        builder.setTitle("Add Photo!");
+        builder.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int item) {
+                if (items[item].equals("Take Photo")) {
+                    dispatchTakePictureIntent();
+                } else if (items[item].equals("Choose from Library")) {
+                    dispatchUploadFromGallery();
+                } else if (items[item].equals("Cancel")) {
+                    dialog.dismiss();
+                }
+            }
+        });
+        builder.show();
     }
 
     //set the Uri image to the imageView
     public void uploadImage(Uri inImage){
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
         Cursor cursor = getContentResolver().query(inImage, filePathColumn, null, null, null);
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
         String picturePath = cursor.getString(columnIndex);
         cursor.close();
         ImageView imageView = (ImageView) findViewById(R.id.image_view);
-        imageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+        bitmapImage = BitmapFactory.decodeFile(picturePath);
+
+        Bitmap rotBit = rotateImageIfRequired(this, bitmapImage, inImage);
+
+        imageView.setImageBitmap(rotBit);
+    }
+
+    private static Bitmap rotateImageIfRequired(Context context,Bitmap img, Uri selectedImage) {
+        // Detect rotation
+        int rotation=getRotation(context, selectedImage);
+        if(rotation!=0){
+            Matrix matrix = new Matrix();
+            matrix.postRotate(rotation);
+            Bitmap rotatedImg = Bitmap.createBitmap(img, 0, 0, img.getWidth(), img.getHeight(), matrix, true);
+            img.recycle();
+            return rotatedImg;
+        }else{
+            return img;
+        }
+    }
+
+    private static int getRotation(Context context, Uri selectedImage) {
+        int rotation =0;
+        ContentResolver content = context.getContentResolver();
+
+
+        Cursor mediaCursor = content.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] { "orientation", "date_added" },null, null,"date_added desc");
+
+        if (mediaCursor != null && mediaCursor.getCount() !=0 ) {
+            while(mediaCursor.moveToNext()){
+                rotation = mediaCursor.getInt(0);
+                break;
+            }
+        }
+        mediaCursor.close();
+        return rotation;
     }
 
     //launch camera
