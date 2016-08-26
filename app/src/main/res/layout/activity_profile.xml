@@ -29,22 +29,33 @@
             android:layout_height="wrap_content"
             android:text="Add Free Item!"
             android:id="@+id/add_Item_title"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:textSize="20dp"
+            />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Logout"
-            android:id="@+id/buttonLogout"
-            android:layout_gravity="center_horizontal" />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Logout"-->
+            <!--android:id="@+id/buttonLogout"-->
+            <!--android:layout_gravity="center_horizontal" />-->
+
+        <!--<ImageView-->
+            <!--android:layout_width="112dp"-->
+            <!--android:layout_height="112dp"-->
+            <!--android:background="#000"/>-->
+        <!---->
+        <!---->
 
 
         <ImageView
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:id="@+id/image_view"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="20dp"
+            android:src="@drawable/add_image"
+
             />
         <!--<LinearLayout-->
             <!--android:layout_width="match_parent"-->
@@ -63,22 +74,71 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Upload Photo"
-                android:id="@+id/button_gallery"
+                android:text="Upload"
+                android:id="@+id/button_upload"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_gravity="center_horizontal" />
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Take Photo"
-                android:id="@+id/buttonPhoto"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_gravity="center_horizontal" />
-        <!--</LinearLayout>-->
 
+            <!--<Button-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="Take Photo"-->
+                <!--android:id="@+id/buttonPhoto"-->
+                <!--android:layout_alignParentTop="true"-->
+                <!--android:layout_alignParentLeft="true"-->
+                <!--android:layout_alignParentStart="true"-->
+                <!--android:layout_gravity="center_horizontal" />-->
+
+
+            <EditText
+                android:id="@+id/text_name"
+                android:layout_margin="5dp"
+                android:hint="Name of Item"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
+
+            <EditText
+                android:id="@+id/text_description"
+                android:layout_margin="5dp"
+                android:hint="Description"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignParentBottom="true"
+                android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
+
+
+        <EditText
+            android:id="@+id/text_contact"
+            android:layout_margin="5dp"
+            android:hint="Contact Info ?"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enter Location ?"
+            android:id="@+id/add_Location"
+            android:layout_gravity="center_horizontal"
+            android:textSize="20dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Post Item!"
+            android:id="@+id/button_post"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center_horizontal" />
+
+        <!--</LinearLayout>-->
     </LinearLayout>
 </RelativeLayout>
