@@ -11,11 +11,19 @@ public class ListActivity extends AppCompatActivity {
 
     public MediaPlayer company;
     private ImageButton searchBtn;
+    //public final ImageButton addPostBtn = (ImageButton)findViewById(R.id.add_button);
+
+    boolean scrollUp;
+    boolean scrollDown;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+
+
+        Bundle bundle = new Bundle();
+
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(R.id.container, new ItemListFragment())
@@ -34,14 +42,33 @@ public class ListActivity extends AppCompatActivity {
             }
         });
 
-
+        //addPostBtn = (ImageButton)findViewById(R.id.add_button);
+//        addPostBtn.setOnClickListener(new View.OnClickListener(){
+//
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+//            }
+//
+//        });
     }
+//    public ImageButton getAddButton(){
+//        return addPostBtn;
+//    }
 
+//    public void setScrollUp(){
+//        scrollUp = true;
+//        scrollDown = false;
+//    }
+//
+//    public void setScrollDown(){
+//        scrollUp = false;
+//        scrollDown = true;
+//    }
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
 //        // Inflate the menu; this adds items to the action bar if it is present.
 //        getMenuInflater().inflate(R.menu.menu, menu);
 //        return true;
 //    }
-
 }

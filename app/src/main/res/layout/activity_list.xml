@@ -55,13 +55,35 @@
     <!--android:voiceSearchMode="showVoiceSearchButton|launchRecognizer">-->
     <!--</searchable>-->
 
-    <FrameLayout
-        android:id="@+id/container"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1">
-    </FrameLayout>
+        android:layout_height="match_parent">
 
 
+
+
+
+        <FrameLayout
+            android:id="@+id/container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1">
+        </FrameLayout>
+
+
+        <!--<ImageButton-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:src="@drawable/plusbuttonorange"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_marginRight="30dp"-->
+            <!--android:layout_marginBottom="30dp"-->
+            <!--android:id="@+id/add_button"-->
+            <!--/>-->
+
+
+    </RelativeLayout>
 
 </LinearLayout>

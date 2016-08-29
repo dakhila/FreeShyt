@@ -190,7 +190,6 @@ public class ProfileActivity extends AppCompatActivity {
         int rotation =0;
         ContentResolver content = context.getContentResolver();
 
-
         Cursor mediaCursor = content.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                 new String[] { "orientation", "date_added" },null, null,"date_added desc");
 
