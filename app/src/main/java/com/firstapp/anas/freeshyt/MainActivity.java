@@ -1,6 +1,6 @@
 package com.firstapp.anas.freeshyt;
 
-import android.app.ProgressDialog;
+import android.app.*;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (firebaseAuth.getCurrentUser() != null){
             // profile activity here
             finish();
-            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+            startActivity(new Intent(getApplicationContext(), ListActivity.class));
         }
 
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);

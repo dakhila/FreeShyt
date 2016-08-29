@@ -1,12 +1,15 @@
 package com.firstapp.anas.freeshyt;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -17,15 +20,17 @@ import java.util.List;
 public class ItemListFragment extends Fragment {
 
     private ArrayAdapter<String> mItemListAdapter;
-
+    ImageButton addBtn;
     public ItemListFragment() {
         // Required empty public constructor
+
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
     }
 
 //    @Override
@@ -73,10 +78,8 @@ public class ItemListFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
 
-
                 //TODO Go to item details page!
                 // with details provided by the OP.
-
 
                 // String forecast = mForecastAdapter.getItem(position);
 //                Intent intent = new Intent(getActivity(), DetailActivity.class)
@@ -84,6 +87,45 @@ public class ItemListFragment extends Fragment {
 //                startActivity(intent);
             }
         });
+
+        addBtn = (ImageButton) rootView.findViewById(R.id.add_button);
+
+        addBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), ProfileActivity.class));
+            }
+        });
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if(mLastFirstVisibleItem<firstVisibleItem)
+                {
+                    //scroll down
+                    addBtn.setVisibility(View.GONE);
+                }
+                if(mLastFirstVisibleItem>firstVisibleItem)
+                {
+                    //Log.i("SCROLLING UP","TRUE");
+                    addBtn.setVisibility(View.VISIBLE);
+                }
+                mLastFirstVisibleItem=firstVisibleItem;
+            }
+        });
+
+
+
+
 
         // Inflate the layout for this fragment
         return rootView;
