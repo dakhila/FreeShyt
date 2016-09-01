@@ -111,23 +111,23 @@
                 android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
 
 
-        <EditText
-            android:id="@+id/text_contact"
-            android:layout_margin="5dp"
-            android:hint="Contact Info ?"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_alignParentBottom="true"
-            android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
+        <!--<EditText-->
+            <!--android:id="@+id/text_contact"-->
+            <!--android:layout_margin="5dp"-->
+            <!--android:hint="Contact Info ?"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Enter Location ?"
-            android:id="@+id/add_Location"
-            android:layout_gravity="center_horizontal"
-            android:textSize="20dp"
-            />
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="Enter Location ?"-->
+            <!--android:id="@+id/add_Location"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:textSize="20dp"-->
+            <!--/>-->
 
         <Button
             android:layout_width="wrap_content"
