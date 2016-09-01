@@ -62,9 +62,6 @@ public class ItemListFragment extends Fragment {
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
 
-
-
-
         //temp data for display
 //        String[] someData = {
 //                "             Lamborghini                               2 miles",
@@ -111,7 +108,7 @@ public class ItemListFragment extends Fragment {
 //            }
 //        });
 
-       addBtn = (ImageButton) rootView.findViewById(R.id.add_button);
+        addBtn = (ImageButton) rootView.findViewById(R.id.add_button);
 //
         addBtn.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -146,10 +143,6 @@ public class ItemListFragment extends Fragment {
             }
         });
 
-
-
-
-
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -157,6 +150,7 @@ public class ItemListFragment extends Fragment {
 
     // Prepare some dummy data for gridview
     private ArrayList<ImageItem> getData() {
+
         final ArrayList<ImageItem> imageItems = new ArrayList<>();
 
         Bitmap bitmapBike = BitmapFactory.decodeResource(getResources(), R.drawable.free_bike);

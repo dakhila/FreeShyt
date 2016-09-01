@@ -1,6 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#f0f0f0">
 
     <GridView
@@ -18,15 +19,27 @@
         android:clickable="true"/>
 
 
-    <ImageButton
+    <!--<ImageButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:src="@drawable/plusbuttonorange"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_marginBottom="15dp"-->
+        <!--android:layout_marginRight="15dp"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:id="@+id/add_button"/>-->
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/plusbuttonorange"
+        android:layout_margin="16dp"
+        android:clickable="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="15dp"
-        android:background="@android:color/transparent"
-        android:id="@+id/add_button"/>
-
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_anchorGravity="bottom|right|end"/>
 </RelativeLayout>

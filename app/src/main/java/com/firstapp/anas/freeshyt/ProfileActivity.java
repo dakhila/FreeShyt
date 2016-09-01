@@ -19,12 +19,17 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 
@@ -39,21 +44,47 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 50;
     Uri imageUri;
     Bitmap bitmapImage;
+
+    final static String DB_URL = "https://freeshyt-c2989.firebaseio.com/";
+    Firebase myFirebaseRef;
+    private static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+    private static DatabaseReference postData = null;
+
+    EditText nameTextField;
+    EditText descTextField;
+    String postName;
+    String postDescription;
+    private Bitmap postImage;
+
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Firebase.setAndroidContext(this);
         setContentView(R.layout.activity_profile);
         // for camera
         iv = (ImageView) findViewById(R.id.imageView);
         Button uploadphoto = (Button) findViewById(R.id.button_upload);
-        Button takePhoto = (Button) findViewById(R.id.buttonPhoto);
-        //buttonphoto.setOnClickListener(this);
-        firebaseAuth = FirebaseAuth.getInstance();
-        if (firebaseAuth.getCurrentUser() == null) {
-            finish();
-            startActivity(new Intent(this, LoginActivity.class));
-        }
-        FirebaseUser user = firebaseAuth.getCurrentUser();
+        Button postButton = (Button) findViewById(R.id.button_post);
+//        firebaseAuth = FirebaseAuth.getInstance();
+//        if (firebaseAuth.getCurrentUser() == null) {
+//            finish();
+//            startActivity(new Intent(this, LoginActivity.class));
+//        }
+//        FirebaseUser user = firebaseAuth.getCurrentUser();
+
+
+        // Create a child reference
+        // imagesRef now points to "images"
+        StorageReference imagesRef = storageRef.child("images");
+
+
+        nameTextField = (EditText) findViewById(R.id.text_name);
+        descTextField = (EditText) findViewById(R.id.text_description);
+
+        final DatabaseReference postsRef = mDatabase.child("Posts");
         //textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
         //textViewUserEmail.setText("Welcome " + user.getEmail());
         //buttonLogout = (Button) findViewById(R.id.buttonLogout);
@@ -79,6 +110,26 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
 
+        postButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, CAM_REQUEST);
+                //selectImage();
+                postName = nameTextField.getText().toString();
+                postDescription = descTextField.getText().toString();
+                Post post = new Post(postName, postDescription);
+
+                //TODO send image to firebase storage
+
+                if(!postName.equals(null) && !postDescription.equals(null)) {
+                    postData = postsRef.push();
+                    postData.setValue(post);
+                    //postData.setValue();
+                    // postsRef.setValue("New!");
+                }
+            }
+        });
 //        takePhoto.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -168,8 +219,8 @@ public class ProfileActivity extends AppCompatActivity {
         bitmapImage = BitmapFactory.decodeFile(picturePath);
 
         Bitmap rotBit = rotateImageIfRequired(this, bitmapImage, inImage);
-
-        imageView.setImageBitmap(rotBit);
+        postImage = rotBit;
+        imageView.setImageBitmap(postImage);
     }
 
     private static Bitmap rotateImageIfRequired(Context context,Bitmap img, Uri selectedImage) {
