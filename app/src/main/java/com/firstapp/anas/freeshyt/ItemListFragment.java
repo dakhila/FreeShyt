@@ -1,10 +1,14 @@
 package com.firstapp.anas.freeshyt;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,17 +17,33 @@ import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+
 import java.util.ArrayList;
 
 
 public class ItemListFragment extends Fragment {
 
+    private static final String TAG = "Test";
+
     private ArrayAdapter<String> mItemListAdapter;
     ImageButton addBtn;
-
     private GridView gridView;
-    private GridViewAdapter gridAdapter;
+    public static GridViewAdapter gridAdapter;
 
+    private static DatabaseReference pDatabase = FirebaseDatabase.getInstance().getReference();
+    static FirebaseStorage storage = FirebaseStorage.getInstance();
+    static StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
+    public static Uri loadFromStroageUri;
 
     public ItemListFragment() {
         // Required empty public constructor
@@ -51,7 +71,6 @@ public class ItemListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
 //        super.onCreate(savedInstanceState);
         View rootView = inflater.inflate(R.layout.fragment_item_list, container, false);
 //        //setContentView(R.layout.gridview);
@@ -62,51 +81,8 @@ public class ItemListFragment extends Fragment {
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
 
-        //temp data for display
-//        String[] someData = {
-//                "             Lamborghini                               2 miles",
-//                "             Yeezy 3                                   1.3 miles",
-//                "             Air Jordan III OG                         1.2 miles",
-//                "             X-Box One                                 .6 miles",
-//                "             Rollex                                    .1 miles",
-//                "             Ipod                                       6 miles",
-//                "             LG T.V.                                    4 miles",
-//                "             Soda                                       .2 miles",
-//                "             T-Shirts                                    1 miles",
-//                "             Movie Posters                               .8 miles",
-//                "             Drugs                                        7 miles",
-//                "             Coffee                                       1 miles",
-//                "             Water                                        7 miles",
-//        };
-//        List<String> freeStuff =
-//                new ArrayList<String>(Arrays.asList(someData));
+        readPostData(getContext());
 
-//        mItemListAdapter =
-//                new ArrayAdapter<String>(
-//                        getActivity(),
-//                        R.layout.list_item,
-//                        R.id.list_item_textview,
-//                        freeStuff);
-//
-//        View rootView = inflater.inflate(R.layout.fragment_item_list, container, false);
-
-//        ListView listView = (ListView) rootView.findViewById(R.id.listview_freestuff);
-//        listView.setAdapter(mItemListAdapter);
-//        listView.setBackgroundResource(R.drawable.luxuryview);
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-//
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-//
-//                //TODO Go to item details page!
-//                // with details provided by the OP.
-//
-//                // String forecast = mForecastAdapter.getItem(position);
-////                Intent intent = new Intent(getActivity(), DetailActivity.class)
-////                        .putExtra(Intent.EXTRA_TEXT, forecast);
-////                startActivity(intent);
-//            }
-//        });
 
         addBtn = (ImageButton) rootView.findViewById(R.id.add_button);
 //
@@ -149,63 +125,123 @@ public class ItemListFragment extends Fragment {
 
 
     // Prepare some dummy data for gridview
-    private ArrayList<ImageItem> getData() {
+    private ArrayList<Post> getData() {
 
-        final ArrayList<ImageItem> imageItems = new ArrayList<>();
-
-        Bitmap bitmapBike = BitmapFactory.decodeResource(getResources(), R.drawable.free_bike);
-        ImageItem bike = new ImageItem(bitmapBike, "Bike");
-        imageItems.add(bike);
+        final ArrayList<Post> postItems = new ArrayList<>();
 
         Bitmap bitmapCouch = BitmapFactory.decodeResource(getResources(), R.drawable.free_pizza);
-        ImageItem couch = new ImageItem(bitmapCouch, "Couch");
-        imageItems.add(couch);
+        Post bike = new Post("Pizza","Perfect", bitmapCouch);
+        postItems.add(bike);
 
         Bitmap bitmapDresser = BitmapFactory.decodeResource(getResources(), R.drawable.free_game);
-        ImageItem dresser = new ImageItem(bitmapDresser, "Nba 2K14");
-        imageItems.add(dresser);
+        Post dresser = new Post("Nba 2K14", "Perfect", bitmapDresser);
+        postItems.add(dresser);
 
-        Bitmap bitmapBindle = BitmapFactory.decodeResource(getResources(), R.drawable.bindle);
-        ImageItem game = new ImageItem(bitmapBindle, "Bindle");
-        imageItems.add(game);
+//        Bitmap bitmapBindle = BitmapFactory.decodeResource(getResources(), R.drawable.bindle);
+//        ImageItem game = new ImageItem(bitmapBindle, "Bindle");
+//        postItems.add(game);
 
-        Bitmap bitmapKeyboard = BitmapFactory.decodeResource(getResources(), R.drawable.free_keyboard);
-        ImageItem keyboard = new ImageItem(bitmapKeyboard, "KeyBoard");
-        imageItems.add(keyboard);
-
-        Bitmap bitmapbed = BitmapFactory.decodeResource(getResources(), R.drawable.free_bed);
-        ImageItem bed = new ImageItem(bitmapbed, "Bed");
-        imageItems.add(bed);
-
-        Bitmap bitmapController = BitmapFactory.decodeResource(getResources(), R.drawable.free_controller);
-        ImageItem controller = new ImageItem(bitmapController, "Controller");
-        imageItems.add(controller);
-
-        Bitmap bitmapTix = BitmapFactory.decodeResource(getResources(), R.drawable.free_tickets);
-        ImageItem Tix = new ImageItem(bitmapTix, "Tickets");
-        imageItems.add(Tix);
+        return postItems;
+    }
 
 
-        Bitmap bitmapRackets = BitmapFactory.decodeResource(getResources(), R.drawable.free_rackets);
-        ImageItem Rackets = new ImageItem(bitmapRackets, "Rackets");
-        imageItems.add(Rackets);
+    public static void readPostData(final Context ctx) {
 
-        Bitmap bitmapMan = BitmapFactory.decodeResource(getResources(), R.drawable.luxuryimg);
-        ImageItem lux = new ImageItem(bitmapMan, "Mansion");
-        imageItems.add(lux);
+        //final DatabaseReference mormonIdRef = mDatabase.child(Values.POSTAL_CODES).child(postalCode).child(Values.MORMON_IDS);
+        final DatabaseReference postReference = pDatabase.child("Posts");
 
-        Bitmap bitmapBindle2 = BitmapFactory.decodeResource(getResources(), R.drawable.bindle);
-        ImageItem game2 = new ImageItem(bitmapBindle2, "Bindle");
-        imageItems.add(game2);
-        //Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bindle);
-        //ImageItem game = new ImageItem(bitmapBike, "Dresser");
+        postReference.addChildEventListener(new ChildEventListener() {
+            // Retrieve new posts as they are added to the database
+            @Override
+            public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
+               // Log.d(TAG, "onChildAdded:" + snapshot.getKey());
 
-//        TypedArray imgs = getResources().obtainTypedArray(R.array.image_ids);
-//        for (int i = 0; i < imgs.length(); i++) {
-//            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgs.getResourceId(i, -1));
-//            imageItems.add(new ImageItem(bitmap, "Image#" + i));
-//        }
-        return imageItems;
+                final String newPostId = snapshot.getKey();
+
+                //DatabaseReference mormonRef = mDatabase.child(Values.MORMONS);
+                postReference.child(newPostId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        //prevent the removal error
+                        if(dataSnapshot.getValue() != null) {
+
+                              //get image
+                              Uri newUri = getUriFromStorage(newPostId);
+                              if(newUri != null) {
+                                  Post newPost = new Post(dataSnapshot, Utility.UriToBitmap(newUri, ctx));
+                                  Log.d(TAG, "" + newPost.getName() + " " + newPost.getDescription());
+                                  gridAdapter.add(newPost);
+                              }
+                            else{
+
+                              }
+
+
+//                            Log.d(TAG, "onDataChange: " + dataSnapshot.getValue());
+//                            Mormon newMormon = new Mormon(dataSnapshot);
+//                            MapHelper.addMormonMarker(mormonId, newMormon);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String previousChildName) {
+                //Log.d(TAG, "onChildChanged:" + dataSnapshot.getKey());
+                if(!Boolean.parseBoolean(dataSnapshot.getValue().toString())){
+
+                   // MapHelper.removeMarkerByKey(dataSnapshot.getKey());
+                }
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                Log.d(TAG, "onChildRemoved:" + dataSnapshot.getKey());
+//                MapHelper.removeMarkerByKey(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String previousChildName) {
+                //Log.d(TAG, "onChildMoved:" + dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                //Log.w(TAG, "onCancelled", databaseError.toException());
+            }
+        });
+    }
+
+    public static Uri getUriFromStorage(String key){
+        Log.d(TAG, "images/" + key + ".jpg !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
+        //StorageReference httpsReference = storage.getReferenceFromUrl("https://console.firebase.google.com/project/freeshyt-c2989/storage/files/");
+        storageRef.child("images/" + key + ".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+            @Override
+            public void onSuccess(Uri uri) {
+                loadFromStroageUri = uri;
+                if(loadFromStroageUri == null){
+                    Log.d(TAG, "null uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                }
+                Log.d(TAG, "success uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+               // Uri imageUri = uri;
+                // Got the download URL for 'users/me/profile.png'
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Log.d(TAG, "fail uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+        });
+        return loadFromStroageUri;
     }
 
     // Prepare some dummy data for gridview

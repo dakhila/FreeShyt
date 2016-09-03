@@ -42,8 +42,8 @@ public class GridViewAdapter extends ArrayAdapter {
             holder = (ViewHolder) row.getTag();
         }
 
-        ImageItem item = (ImageItem) data.get(position);
-        holder.imageTitle.setText(item.getTitle());
+        Post item = (Post) data.get(position);
+        holder.imageTitle.setText(item.getName());
         holder.image.setImageBitmap(item.getImage());
         return row;
     }

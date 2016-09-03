@@ -54,10 +54,12 @@ public class ProfileActivity extends AppCompatActivity {
     EditText descTextField;
     String postName;
     String postDescription;
-    private Bitmap postImage;
+    private Uri postImage;
+    String postKey;
 
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
+    final StorageReference imagesRef = storageRef.child("images");;
 //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         // Create a child reference
         // imagesRef now points to "images"
-        StorageReference imagesRef = storageRef.child("images");
+
 
 
         nameTextField = (EditText) findViewById(R.id.text_name);
@@ -122,11 +124,20 @@ public class ProfileActivity extends AppCompatActivity {
 
                 //TODO send image to firebase storage
 
-                if(!postName.equals(null) && !postDescription.equals(null)) {
+                if(!postName.equals(null) &&
+                        !postDescription.equals(null) && !postImage.equals(null)) {
                     postData = postsRef.push();
+                    postKey = postData.getKey();
                     postData.setValue(post);
+
+                    StorageReference postImagesRef = storageRef.child("images/" + postKey + ".jpg");
+                    postImagesRef.putFile(postImage);
                     //postData.setValue();
                     // postsRef.setValue("New!");
+                }
+                else{
+                    Toast.makeText(getApplicationContext(), "Fill in required info!", Toast.LENGTH_SHORT).show();
+
                 }
             }
         });
@@ -208,8 +219,9 @@ public class ProfileActivity extends AppCompatActivity {
 
     //set the Uri image to the imageView
     public void uploadImage(Uri inImage){
+        postImage = inImage;
+        //convert uri to bitmap
         String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
         Cursor cursor = getContentResolver().query(inImage, filePathColumn, null, null, null);
         cursor.moveToFirst();
         int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
@@ -219,8 +231,7 @@ public class ProfileActivity extends AppCompatActivity {
         bitmapImage = BitmapFactory.decodeFile(picturePath);
 
         Bitmap rotBit = rotateImageIfRequired(this, bitmapImage, inImage);
-        postImage = rotBit;
-        imageView.setImageBitmap(postImage);
+        imageView.setImageBitmap(rotBit);
     }
 
     private static Bitmap rotateImageIfRequired(Context context,Bitmap img, Uri selectedImage) {
