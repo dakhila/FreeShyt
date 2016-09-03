@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -31,7 +33,7 @@ import com.google.firebase.storage.StorageReference;
 import java.util.ArrayList;
 
 
-public class ItemListFragment extends Fragment {
+public class ItemListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private static final String TAG = "Test";
 
@@ -80,6 +82,7 @@ public class ItemListFragment extends Fragment {
         gridView = (GridView) rootView.findViewById(R.id.gridView);
         gridAdapter = new GridViewAdapter(getActivity(), R.layout.grid_item_layout, getData());
         gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(this);
 
         readPostData(getContext());
 
@@ -242,6 +245,16 @@ public class ItemListFragment extends Fragment {
             }
         });
         return loadFromStroageUri;
+    }
+
+    // 1st respresents grid view
+    // 2nd single item thats clicked (has a reference to relative layout)
+    // 3rd position of item
+    // 4th for databases
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+        startActivity(intent);
     }
 
     // Prepare some dummy data for gridview
