@@ -5,7 +5,7 @@ import android.graphics.Bitmap;
 /**
  * Created by Devin on 8/30/2016.
  */
-
+//Image class for displaying in the main list
 public class ImageItem {
     private Bitmap image;
     private String title;
