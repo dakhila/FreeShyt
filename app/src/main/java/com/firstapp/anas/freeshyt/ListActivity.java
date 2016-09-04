@@ -28,7 +28,7 @@ public class ListActivity extends AppCompatActivity {
                 .commit();
 
         company = MediaPlayer.create(this, R.raw.company);
-        company.start();
+        //company.start();
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
