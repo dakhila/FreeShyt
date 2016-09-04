@@ -17,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -120,24 +121,26 @@ public class ProfileActivity extends AppCompatActivity {
                 //selectImage();
                 postName = nameTextField.getText().toString();
                 postDescription = descTextField.getText().toString();
-                Post post = new Post(postName, postDescription);
 
-                //TODO send image to firebase storage
 
                 if(!postName.equals(null) &&
                         !postDescription.equals(null) && !postImage.equals(null)) {
+
+                    Post post = new Post(postName, postDescription);
+
                     postData = postsRef.push();
                     postKey = postData.getKey();
                     postData.setValue(post);
 
-                    StorageReference postImagesRef = storageRef.child("images/" + postKey + ".jpg");
+                    StorageReference postImagesRef = storageRef.child("images/" + postKey);
                     postImagesRef.putFile(postImage);
+
+                    Log.d("TEST", "post to storage " + postImage + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     //postData.setValue();
                     // postsRef.setValue("New!");
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "Fill in required info!", Toast.LENGTH_SHORT).show();
-
                 }
             }
         });

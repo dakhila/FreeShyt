@@ -9,6 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 
 /**
@@ -44,7 +46,9 @@ public class GridViewAdapter extends ArrayAdapter {
 
         Post item = (Post) data.get(position);
         holder.imageTitle.setText(item.getName());
-        holder.image.setImageBitmap(item.getImage());
+        //holder.image.setImageBitmap(item.getImage());
+        Picasso.with(context).load(item.getImageUrl()).into(holder.image);
+
         return row;
     }
 
