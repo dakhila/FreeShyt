@@ -78,11 +78,8 @@ public class ProfileActivity extends AppCompatActivity {
 //        }
 //        FirebaseUser user = firebaseAuth.getCurrentUser();
 
-
         // Create a child reference
         // imagesRef now points to "images"
-
-
 
         nameTextField = (EditText) findViewById(R.id.text_name);
         descTextField = (EditText) findViewById(R.id.text_description);
@@ -123,8 +120,8 @@ public class ProfileActivity extends AppCompatActivity {
                 postDescription = descTextField.getText().toString();
 
 
-                if(!postName.equals(null) &&
-                        !postDescription.equals(null) && !postImage.equals(null)) {
+                if(!postName.equals("") &&
+                        !postDescription.equals("") && !postImage.equals(null)) {
 
                     Post post = new Post(postName, postDescription);
 
@@ -196,7 +193,6 @@ public class ProfileActivity extends AppCompatActivity {
                 }
                 return;
             }
-
         }
     }
 

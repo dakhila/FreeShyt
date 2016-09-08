@@ -28,7 +28,6 @@ public class Post {
         imageUri = inUri;
     }
 
-
     public Post(DataSnapshot snapshot, Uri inUri){
         //zip = snapshot.child(Values.ZIP).getValue().toString();
 //        latLng = new LatLng((double)snapshot.child(Values.LAT_LNG).child(Values.LATITUDE).getValue(),
