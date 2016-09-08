@@ -46,6 +46,10 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
 
     public static DataSnapshot newData;
 
+
+    static final ArrayList<DataSnapshot> loadPosts = new ArrayList<DataSnapshot>();
+
+
     public ItemListFragment() {
         // Required empty public constructor
 
@@ -90,6 +94,7 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
         addBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                readPostData(null);
                 startActivity(new Intent(getActivity(), ProfileActivity.class));
             }
         });
@@ -149,84 +154,47 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
 
 
     public static void readPostData(final Context ctx) {
+
         if(ctx != null) {
             //final DatabaseReference mormonIdRef = mDatabase.child(Values.POSTAL_CODES).child(postalCode).child(Values.MORMON_IDS);
+
             final DatabaseReference postReference = pDatabase.child("Posts");
 
             postReference.addChildEventListener(new ChildEventListener() {
+
+
                 // Retrieve new posts as they are added to the database
                 @Override
                 public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
                     // Log.d(TAG, "onChildAdded:" + snapshot.getKey());
 
-                    final String newPostId = snapshot.getKey();
+                    //Log.d(TAG, "Count TOTAL!!!! " + snapshot.getChildrenCount());
 
-                    //DatabaseReference mormonRef = mDatabase.child(Values.MORMONS);
-                    postReference.child(newPostId).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            final String newPostId = snapshot.getKey();
+                            //DatabaseReference mormonRef = mDatabase.child(Values.MORMONS);
+                            postReference.child(newPostId).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            //prevent the removal error
-                            if (dataSnapshot.getValue() != null) {
+                                    //prevent the removal error
+                                    if (dataSnapshot.getValue() != null) {
 
-                                //get image
-                                //Uri newUri = getUriFromStorage(newPostId);
-                                //if(newUri != null) {
-                                newData = dataSnapshot;
-                                // }
-                                // else{
-                                //   Log.d(TAG, "newUri null !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                //  }
-//                            Log.d(TAG, "onDataChange: " + dataSnapshot.getValue());
-//                            Mormon newMormon = new Mormon(dataSnapshot);
-//                            MapHelper.addMormonMarker(mormonId, newMormon);
-
-
-                                Log.d(TAG, "images/" + newPostId + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
-                                //StorageReference httpsReference = storage.getReferenceFromUrl("https://console.firebase.google.com/project/freeshyt-c2989/storage/files/");
-                                storageRef.child("images/" + newPostId).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                    public Uri newUri;
-
-                                    @Override
-                                    public void onSuccess(Uri uri) {
-                                        //loadFromStroageUri = uri;
-                                        Log.d(TAG, "success uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                        // Uri imageUri = uri;
-                                        // Got the download URL for 'users/me/profile.png'
-//
-//                                        Bitmap bitmapImage;
-//                                        String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//                                        Cursor cursor = ctx.getContentResolver().query(uri, filePathColumn, null, null, null);
-//                                        cursor.moveToFirst();
-//                                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                                        String picturePath = cursor.getString(columnIndex);
-//                                        cursor.close();
-//                                        //ImageView imageView = (ImageView) findViewById(R.id.image_view);
-//                                        bitmapImage = BitmapFactory.decodeFile(picturePath);
-
-
-                                        Post newPost = new Post(newData, uri);
-                                        Log.d(TAG, "" + newPost.getName() + " " + newPost.getDescription() + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                        gridAdapter.add(newPost);
-
+                                        //newPost.getImageUrl() + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                                        //for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                        //Getting the data from snapshot
+                                        newData = dataSnapshot;
+                                        loadPosts.add(newData);
+                                        Log.d(TAG, "Count " + newData.getValue());
+                                        loadUriImage(newData);
+                                        // }
                                     }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception exception) {
-                                        // Handle any errors
-                                        Log.d(TAG, "fail uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                                    }
-                                });
+                                }
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
 
-                            }
-                        }
+                                }
+                            });
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-
-                        }
-                    });
                 }
 
                 @Override
@@ -266,6 +234,33 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
         // and other activities might need to use it.
         readPostData(null);
     }
+
+    public static void loadUriImage(final DataSnapshot snap){
+
+        StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
+        //StorageReference httpsReference = storage.getReferenceFromUrl("https://console.firebase.google.com/project/freeshyt-c2989/storage/files/");
+        storageRef.child("images/" + snap.getKey()).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+
+            @Override
+            public void onSuccess(Uri uri) {
+
+                Post newPost = new Post(snap.child("name").getValue().toString(),
+                        snap.child("description").getValue().toString(), uri);
+                //Log.d(TAG, "POOOOOOOOOOOOOOOOOST " + newPost.getName() + " " + newPost.getDescription() +
+                //      newPost.getImageUrl() + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                gridAdapter.add(newPost);
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Log.d(TAG, "fail uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+        });
+    }
+
+
 //
 //    @Override
 //    public void onResume() {
