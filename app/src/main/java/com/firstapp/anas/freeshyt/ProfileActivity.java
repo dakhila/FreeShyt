@@ -17,7 +17,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -61,7 +60,7 @@ public class ProfileActivity extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
     final StorageReference imagesRef = storageRef.child("images");;
-//
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,7 +118,6 @@ public class ProfileActivity extends AppCompatActivity {
                 postName = nameTextField.getText().toString();
                 postDescription = descTextField.getText().toString();
 
-
                 if(!postName.equals("") &&
                         !postDescription.equals("") && !postImage.equals(null)) {
 
@@ -132,7 +130,6 @@ public class ProfileActivity extends AppCompatActivity {
                     StorageReference postImagesRef = storageRef.child("images/" + postKey);
                     postImagesRef.putFile(postImage);
 
-                    Log.d("TEST", "post to storage " + postImage + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                     //postData.setValue();
                     // postsRef.setValue("New!");
                 }

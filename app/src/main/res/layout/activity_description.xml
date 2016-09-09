@@ -10,10 +10,9 @@
     tools:context="com.firstapp.anas.freeshyt.DescriptionActivity">
 
     <ImageView
-        android:src="@drawable/batman"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:id="@+id/uriView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -21,11 +20,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Back"
+        android:text="name of post"
         android:id="@+id/textView"
         android:layout_below="@+id/imageView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="46dp" />
+        android:layout_marginTop="300dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="desc of post"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="330dp" />
 
     <Button
         android:layout_width="wrap_content"
