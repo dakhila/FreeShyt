@@ -46,8 +46,9 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
 
     public static DataSnapshot newData;
 
+    static final ArrayList<Post> localList = new ArrayList<Post>();
 
-    static final ArrayList<DataSnapshot> loadPosts = new ArrayList<DataSnapshot>();
+    static boolean pause;
 
 
     public ItemListFragment() {
@@ -87,10 +88,8 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
         gridView.setAdapter(gridAdapter);
         gridView.setOnItemClickListener(this);
 
-
-
         addBtn = (ImageButton) rootView.findViewById(R.id.add_button);
-//
+
         addBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -152,7 +151,6 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
         return postItems;
     }
 
-
     public static void readPostData(final Context ctx) {
 
         if(ctx != null) {
@@ -162,12 +160,10 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
 
             postReference.addChildEventListener(new ChildEventListener() {
 
-
                 // Retrieve new posts as they are added to the database
                 @Override
                 public void onChildAdded(DataSnapshot snapshot, String previousChildKey) {
                     // Log.d(TAG, "onChildAdded:" + snapshot.getKey());
-
                     //Log.d(TAG, "Count TOTAL!!!! " + snapshot.getChildrenCount());
 
                             final String newPostId = snapshot.getKey();
@@ -175,7 +171,6 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
                             postReference.child(newPostId).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-
                                     //prevent the removal error
                                     if (dataSnapshot.getValue() != null) {
 
@@ -183,7 +178,7 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
                                         //for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                                         //Getting the data from snapshot
                                         newData = dataSnapshot;
-                                        loadPosts.add(newData);
+                                        //loadPosts.add(newData);
                                         Log.d(TAG, "Count " + newData.getValue());
                                         loadUriImage(newData);
                                         // }
@@ -194,7 +189,6 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
 
                                 }
                             });
-
                 }
 
                 @Override
@@ -225,14 +219,28 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
         }
     }
 
-
     @Override
     public void onPause() {
         super.onPause();  // Always call the superclass method first
 
+        Log.d(TAG, "PAUSE !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        pause = true;
         // Release the Camera because we don't need it when paused
         // and other activities might need to use it.
-        readPostData(null);
+        //readPostData(null);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();  // Always call the superclass method first
+
+
+        Log.d(TAG, "RESUME !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        pause = false;
+        //readPostData(getContext());
+        // Release the Camera because we don't need it when paused
+        // and other activities might need to use it.
+        //readPostData(getContext());
     }
 
     public static void loadUriImage(final DataSnapshot snap){
@@ -248,6 +256,7 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
                         snap.child("description").getValue().toString(), uri);
                 //Log.d(TAG, "POOOOOOOOOOOOOOOOOST " + newPost.getName() + " " + newPost.getDescription() +
                 //      newPost.getImageUrl() + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+                localList.add(newPost);
                 gridAdapter.add(newPost);
 
             }
@@ -260,54 +269,21 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
         });
     }
 
-
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();  // Always call the superclass method first
-//
-//        // Get the Camera instance as the activity achieves full user focus
-//        readPostData(getContext());
-//    }
-
-//    public static Uri getUriFromStorage(String key){
-//
-//        Log.d(TAG, "images/" + key + " !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//        StorageReference storageRef = storage.getReferenceFromUrl("gs://freeshyt-c2989.appspot.com");
-//        //StorageReference httpsReference = storage.getReferenceFromUrl("https://console.firebase.google.com/project/freeshyt-c2989/storage/files/");
-//        storageRef.child("images/" + key).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//            public Uri newUri;
-//            @Override
-//            public void onSuccess(Uri uri) {
-//                loadFromStroageUri = uri;
-//                Log.d(TAG, "success uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//               // Uri imageUri = uri;
-//                // Got the download URL for 'users/me/profile.png'
-//            }
-//
-//            public Uri getUri(){
-//                return newUri;
-//            }
-//        }).addOnFailureListener(new OnFailureListener() {
-//            @Override
-//            public void onFailure(@NonNull Exception exception) {
-//                // Handle any errors
-//                Log.d(TAG, "fail uri !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//            }
-//        });
-//
-//
-//        return loadFromStroageUri;
-//
-//    }
-
     // 1st respresents grid view
     // 2nd single item thats clicked (has a reference to relative layout)
     // 3rd position of item
     // 4th for databases
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+        Post detailPost = localList.get(i);
+
         Intent intent = new Intent(getActivity(), DescriptionActivity.class);
+        intent.putExtra("name", detailPost.getName());
+        intent.putExtra("description", detailPost.getDescription());
+        //convert Uri to String to send
+        intent.putExtra("image", detailPost.getImageUrl().toString());
         startActivity(intent);
     }
 
@@ -321,6 +297,10 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
 //        }
 //        return imageItems;
 //    }
+
+    public static ArrayList<Post> getLocalList(){
+        return localList;
+    }
 
 
 }
