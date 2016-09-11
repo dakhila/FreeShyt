@@ -52,8 +52,10 @@ public class ProfileActivity extends AppCompatActivity {
 
     EditText nameTextField;
     EditText descTextField;
+    EditText addressTextField;
     String postName;
     String postDescription;
+    String address;
     private Uri postImage;
     String postKey;
 
@@ -82,6 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
 
         nameTextField = (EditText) findViewById(R.id.text_name);
         descTextField = (EditText) findViewById(R.id.text_description);
+        addressTextField = (EditText) findViewById(R.id.address);
 
         final DatabaseReference postsRef = mDatabase.child("Posts");
         //textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
@@ -117,9 +120,19 @@ public class ProfileActivity extends AppCompatActivity {
                 //selectImage();
                 postName = nameTextField.getText().toString();
                 postDescription = descTextField.getText().toString();
+                address = addressTextField.getText().toString();
+
+                GeocodingLocation locationAddress = new GeocodingLocation();
+                locationAddress.getAddressFromLocation(address,
+                        getApplicationContext());
+
 
                 if(!postName.equals("") &&
-                        !postDescription.equals("") && !postImage.equals(null)) {
+                        !postDescription.equals("") && !postImage.equals(null)
+                        && !address.equals("")) {
+
+
+
 
                     Post post = new Post(postName, postDescription);
 
@@ -159,6 +172,8 @@ public class ProfileActivity extends AppCompatActivity {
 //            }
 //        });
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
