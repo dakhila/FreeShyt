@@ -15,8 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
-
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -176,13 +174,13 @@
             android:layout_height="300dp">
 
 
-            <ImagineView
-                android:layout_width="170dp"
-                android:layout_height="170dp"
-                android:id="@+id/locatePin"
-                android:src="@drawable/ic_locate_pin"
-                android:layout_gravity="center_horizontal"
-                />
+            <!--<ImagineView-->
+                <!--android:layout_width="170dp"-->
+                <!--android:layout_height="170dp"-->
+                <!--android:id="@+id/locatePin"-->
+                <!--android:src="@drawable/ic_locate_pin"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--/>-->
 
             <FrameLayout
                 android:id="@+id/map_container"
@@ -190,7 +188,8 @@
                 android:layout_height="match_parent" >
             </FrameLayout>
 
-        />
+        </RelativeLayout>
+
 
 
         <Button
