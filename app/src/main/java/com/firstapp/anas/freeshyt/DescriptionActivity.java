@@ -36,6 +36,8 @@ public class DescriptionActivity extends Activity {
         nameView.setText(name);
         nameView2.setText(description);
 
+
+
     }
 
     public void closeDialog (View v) {

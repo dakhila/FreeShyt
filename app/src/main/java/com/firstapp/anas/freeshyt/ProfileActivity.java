@@ -61,6 +61,7 @@ public class ProfileActivity extends AppCompatActivity implements OnMapReadyCall
     private static DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
     private static DatabaseReference postData = null;
 
+
     EditText nameTextField;
     EditText descTextField;
     EditText addressTextField;
