@@ -50,7 +50,6 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
 
     static boolean pause;
 
-
     public ItemListFragment() {
         // Required empty public constructor
 
@@ -62,10 +61,7 @@ public class ItemListFragment extends Fragment implements AdapterView.OnItemClic
         setHasOptionsMenu(true);
 
 //        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-
-
-
+//        setContentView(R.layout.activity_main)
     }
 
 //    @Override
