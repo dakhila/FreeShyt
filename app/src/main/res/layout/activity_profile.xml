@@ -9,6 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.firstapp.anas.freeshyt.ProfileActivity">
 
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -31,6 +39,18 @@
             android:id="@+id/add_Item_title"
             android:layout_gravity="center_horizontal"
             android:textSize="20dp"
+            android:textStyle="bold"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Step 1: Upload Photo"
+            android:id="@+id/add_Photo"
+            android:textSize="16dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
             />
 
         <!--<Button-->
@@ -81,6 +101,18 @@
                 android:layout_alignParentStart="true"
                 android:layout_gravity="center_horizontal" />
 
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Step 2: Add Information"
+            android:id="@+id/add_Info"
+            android:textSize="16dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            />
+
             <!--<Button-->
                 <!--android:layout_width="wrap_content"-->
                 <!--android:layout_height="wrap_content"-->
@@ -109,14 +141,6 @@
                 android:layout_alignParentBottom="true"
                 android:voiceSearchMode="showVoiceSearchButton|launchRecognizer"/>
 
-            <EditText
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/address"
-                android:layout_alignParentTop="true"
-                android:singleLine="true"
-                android:hint="Address" />
-
 
         <!--<EditText-->
             <!--android:id="@+id/text_contact"-->
@@ -136,6 +160,39 @@
             <!--android:textSize="20dp"-->
             <!--/>-->
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Step 3: Add Location"
+            android:id="@+id/add_Location"
+            android:textSize="16dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+
+
+            <ImagineView
+                android:layout_width="170dp"
+                android:layout_height="170dp"
+                android:id="@+id/locatePin"
+                android:src="@drawable/ic_locate_pin"
+                android:layout_gravity="center_horizontal"
+                />
+
+            <FrameLayout
+                android:id="@+id/map_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+            </FrameLayout>
+
+        />
+
+
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -146,8 +203,9 @@
             android:layout_alignParentStart="true"
             android:layout_gravity="center_horizontal" />
 
-
-
         <!--</LinearLayout>-->
     </LinearLayout>
+
+
+    </ScrollView>
 </RelativeLayout>

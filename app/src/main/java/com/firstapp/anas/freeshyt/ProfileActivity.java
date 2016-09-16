@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -33,7 +42,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private FirebaseAuth firebaseAuth;
     ImageView iv;
@@ -44,6 +53,8 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int REQUEST_EXTERNAL_STORAGE = 50;
     Uri imageUri;
     Bitmap bitmapImage;
+    private static GoogleMap myMap;
+    private static CameraPosition mCurrCamera;
 
     final static String DB_URL = "https://freeshyt-c2989.firebaseio.com/";
     Firebase myFirebaseRef;
@@ -82,9 +93,19 @@ public class ProfileActivity extends AppCompatActivity {
         // Create a child reference
         // imagesRef now points to "images"
 
+        //initiate the map
+        SupportMapFragment mapFragment = new SupportMapFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.map_container, mapFragment).commit();
+        mapFragment.getMapAsync(this);
+
+
+
+
+
         nameTextField = (EditText) findViewById(R.id.text_name);
         descTextField = (EditText) findViewById(R.id.text_description);
-        addressTextField = (EditText) findViewById(R.id.address);
+        //addressTextField = (EditText) findViewById(R.id.address);
 
         final DatabaseReference postsRef = mDatabase.child("Posts");
         //textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
@@ -120,16 +141,16 @@ public class ProfileActivity extends AppCompatActivity {
                 //selectImage();
                 postName = nameTextField.getText().toString();
                 postDescription = descTextField.getText().toString();
-                address = addressTextField.getText().toString();
+                //address = addressTextField.getText().toString();
 
-                GeocodingLocation locationAddress = new GeocodingLocation();
-                locationAddress.getAddressFromLocation(address,
-                        getApplicationContext());
+                //GeocodingLocation locationAddress = new GeocodingLocation();
+                //locationAddress.getAddressFromLocation(address,
+                       // getApplicationContext());
 
 
                 if(!postName.equals("") &&
-                        !postDescription.equals("") && !postImage.equals(null)
-                        && !address.equals("")) {
+                        !postDescription.equals("") && !postImage.equals(null))
+                         {
 
 
 
@@ -294,4 +315,38 @@ public class ProfileActivity extends AppCompatActivity {
         photoPickerIntent.setDataAndType(data, "image/*");
         startActivityForResult(photoPickerIntent, SELECTED_PICTURE);
     }
+
+    public void onMapReady(GoogleMap map) {
+
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            public boolean onMarkerClick(Marker marker) {
+                marker.showInfoWindow();
+                //Do whatever you need to do here ....
+                return true;
+            }
+        });
+
+
+        myMap = map;
+        LatLng startLatLng = new LatLng(47.6, 122.3);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(startLatLng);
+        map.addMarker(markerOptions);
+
+       // CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(startLatLng, 40);
+        CameraPosition.Builder builder = new CameraPosition.Builder();
+        builder.zoom(45);
+        builder.target(startLatLng);
+        //CameraPosition camPos = new CameraPosition(startLatLng, 30);
+        flyToLocation(builder.build());
+        //CameraPosition cpos = new CameraPosition();
+        //myMap.moveCamera(CameraUpdateFactory.newCameraPosition(mCurrCamera));
+
+    }
+
+    public static void flyToLocation(CameraPosition inPos) {
+
+        myMap.moveCamera(CameraUpdateFactory.newCameraPosition(inPos));
+    }
+
 }
