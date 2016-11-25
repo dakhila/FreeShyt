@@ -1,8 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#f0f0f0">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <GridView
         android:id="@+id/gridView"
@@ -29,10 +28,6 @@
         <!--android:layout_marginRight="15dp"-->
         <!--android:background="@android:color/transparent"-->
         <!--android:id="@+id/add_button"/>-->
-
-
-
-
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_button"

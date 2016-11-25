@@ -3,6 +3,7 @@ package com.firstapp.anas.freeshyt;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -28,13 +32,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 //temp
-//        firebaseAuth = FirebaseAuth.getInstance();
+       firebaseAuth = FirebaseAuth.getInstance();
 
-//        if (firebaseAuth.getCurrentUser() != null){
-//            // profile activity here
-//            finish();
-//            startActivity(new Intent(getApplicationContext(), ListActivity.class));
-//        }
+       if (firebaseAuth.getCurrentUser() != null){
+          // profile activity here
+           finish();
+           startActivity(new Intent(getApplicationContext(), ListActivity.class));
+        }
 
         editTextEmail = (EditText) findViewById(R.id.editTextEmail);
         editTextPassword = (EditText) findViewById(R.id.editTextPassword);
@@ -70,19 +74,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         progressDialog.show();
 
         //temp
-//        firebaseAuth.signInWithEmailAndPassword(email, password)
-//                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        progressDialog.dismiss();
-//
-//                        if(task.isSuccessful()){
-//                            // start the profile activity
-//                            finish();
-//                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
-//                        }
-//                    }
-//                });
+       firebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                  public void onComplete(@NonNull Task<AuthResult> task) {
+                      progressDialog.dismiss();
+
+                     if(task.isSuccessful()){
+                           // start the profile activity
+                            finish();
+                            startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
+                       }
+                    }
+                });
 
     }
     @Override

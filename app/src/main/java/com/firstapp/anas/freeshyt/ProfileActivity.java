@@ -35,6 +35,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -84,12 +85,12 @@ public class ProfileActivity extends AppCompatActivity implements OnMapReadyCall
         iv = (ImageView) findViewById(R.id.imageView);
         Button uploadphoto = (Button) findViewById(R.id.button_upload);
         Button postButton = (Button) findViewById(R.id.button_post);
-//        firebaseAuth = FirebaseAuth.getInstance();
-//        if (firebaseAuth.getCurrentUser() == null) {
-//            finish();
-//            startActivity(new Intent(this, LoginActivity.class));
-//        }
-//        FirebaseUser user = firebaseAuth.getCurrentUser();
+        firebaseAuth = FirebaseAuth.getInstance();
+       if (firebaseAuth.getCurrentUser() == null) {
+           finish();
+           startActivity(new Intent(this, LoginActivity.class));
+       }
+        FirebaseUser user = firebaseAuth.getCurrentUser();
 
         // Create a child reference
         // imagesRef now points to "images"
