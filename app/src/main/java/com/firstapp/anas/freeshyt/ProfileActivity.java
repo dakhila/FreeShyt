@@ -112,8 +112,16 @@ public class ProfileActivity extends AppCompatActivity implements OnMapReadyCall
         final DatabaseReference postsRef = mDatabase.child("Posts");
         //textViewUserEmail = (TextView) findViewById(R.id.textViewUserEmail);
         //textViewUserEmail.setText("Welcome " + user.getEmail());
-        //buttonLogout = (Button) findViewById(R.id.buttonLogout);
+       // buttonLogout = (Button) findViewById(R.id.buttonLogout);
         //buttonLogout.setOnClickListener(this);
+
+            //public void onClick(View view) {
+              //  if (view == buttonLogout) {
+                //    firebaseAuth.signOut();
+                //finish();
+                //startActivity(new Intent(this,LoginActivity.class));
+               // }
+           // }
         uploadphoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -327,7 +335,6 @@ public class ProfileActivity extends AppCompatActivity implements OnMapReadyCall
                 return true;
             }
         });
-
 
         myMap = map;
         LatLng startLatLng = new LatLng(47.6, 122.3);
