@@ -96,7 +96,8 @@ public class ListActivity extends AppCompatActivity {
             case R.id.menu_logout:
                 Toast.makeText(ListActivity.this, "Logout Successful", Toast.LENGTH_SHORT).show();
                 finish();
-                startActivity(new Intent(this, MainActivity.class));
+                firebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), LoginActivity.class));
                 break;
 
             case R.id.menu_2:
