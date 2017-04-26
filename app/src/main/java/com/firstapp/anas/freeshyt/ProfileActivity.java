@@ -84,7 +84,7 @@ public class ProfileActivity extends AppCompatActivity implements OnMapReadyCall
         // for camera
         iv = (ImageView) findViewById(R.id.imageView);
         Button uploadphoto = (Button) findViewById(R.id.button_upload);
-        Button postButton = (Button) findViewById(R.id.button_post);
+        final Button postButton = (Button) findViewById(R.id.button_post);
         firebaseAuth = FirebaseAuth.getInstance();
        if (firebaseAuth.getCurrentUser() == null) {
            finish();
@@ -146,6 +146,10 @@ public class ProfileActivity extends AppCompatActivity implements OnMapReadyCall
         postButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (view == postButton) {
+                    finish();
+                    startActivity(new Intent(ProfileActivity.this, MainActivity.class));
+                }
 //                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                startActivityForResult(intent, CAM_REQUEST);
                 //selectImage();
@@ -161,9 +165,6 @@ public class ProfileActivity extends AppCompatActivity implements OnMapReadyCall
                 if(!postName.equals("") &&
                         !postDescription.equals("") && !postImage.equals(null))
                          {
-
-
-
 
                     Post post = new Post(postName, postDescription);
 
